@@ -1,4 +1,3 @@
-
 /* Ejercicio:
     Una empresa de transporte cuenta con camiones de diferente tamaño.
     Al finalizar el día se cuenta con los datos de cada viaje ordenados por patente en forma ascendente:
@@ -18,6 +17,7 @@
     Para escribir el código, se asume que los datos ya están cargados en vectores estáticos y que cada vector tiene una variable asociada que indica la cantidad de elementos cargados.
     Se asume que cada vehículo realiza al menos un viaje en el día.
 */
+
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -137,36 +137,42 @@ void peor_y_mejor_rendimiento (Viaje viajes[], Vehiculo vehiculos[], int len_via
     
                 i++;
             }
-            
+            float rendimiento = 0.00;
             if(consumo_por_vehiculo != 0){
                 // rendimiento = importe / consumo_del_vehiculo; (cuanto importe obtengo cada litro de combustible utilizado)
-                float rendimiento = total_importes_por_vehiculo/consumo_por_vehiculo;
+                rendimiento = total_importes_por_vehiculo/consumo_por_vehiculo;
                 if(rendimiento < peor_rendimiento){
                     peor_rendimiento = rendimiento;
                     indice_peor_rendimiento = index;
-                }
+                } // Si pongo "else if", y la primer patente es la de mayor rendimiento, no la va a tomar.
                 if(rendimiento > mejor_rendimiento){
                     mejor_rendimiento = rendimiento;
                     indice_mejor_rendimiento = index;
                 }
             }
-
+            /*
+            Para facilitar chequeo, descomentar.
+            cout << "\nKey: " << key;
+            cout << "\nconsumo_por_vehiculo:" << consumo_por_vehiculo;
+            cout << "\ntotal_importes_por_vehiculo:" << total_importes_por_vehiculo;
+            cout << "\nrendimiento:" << rendimiento;
+            cout << "\nmejor_rendimiento:" << mejor_rendimiento;
+            cout << "\npeor_rendimiento:" << peor_rendimiento << endl;
+            */
         }
     }
 
     if(indice_mejor_rendimiento != -1){
-        cout << "\nMejor rendimiento:\n  - vehiculo con patente: " << vehiculos[indice_mejor_rendimiento].patente << endl;
-        cout << "  - Rendimiento de: " << fixed << setprecision(2) << mejor_rendimiento <<"$/L." << endl;   
+        cout << "\n Mejor rendimiento:\n    - vehiculo con patente: " << vehiculos[indice_mejor_rendimiento].patente << endl;
+        cout << "     - Rendimiento de: " << fixed << setprecision(2) << mejor_rendimiento <<"$/L." << endl;   
+    } else {
+        cout << "\n     No se ha encontrado viaje con mejor rendimiento" << endl;
     }
     if(indice_peor_rendimiento != -1){
-        cout << "\nPeor rendimiento:\n  - vehiculo con patente: " << vehiculos[indice_peor_rendimiento].patente << endl;  
-        cout << "  - Rendimiento de: " << fixed << setprecision(2) << peor_rendimiento <<"$/L." << endl;
-    }
-    if(indice_mejor_rendimiento == -1){
-        cout << "\nNo se ha encontrado viaje con mejor rendimiento" << endl;
-    }
-    if(indice_peor_rendimiento == -1){
-        cout << "\nNo se ha encontrado viaje con peor rendimiento" << endl;
+        cout << "\n Peor rendimiento:\n     - vehiculo con patente: " << vehiculos[indice_peor_rendimiento].patente << endl;  
+        cout << "     - Rendimiento de: " << fixed << setprecision(2) << peor_rendimiento <<"$/L." << endl;
+    } else {
+        cout << "\n     No se ha encontrado viaje con peor rendimiento" << endl;
     }
     return;
 }
@@ -177,7 +183,7 @@ void mostrar_vehiculos(Vehiculo vehiculos[], int len_vehiculos){
         cout << "\n     (patente numero " << i+1 << " : " << vehiculos[i].patente;
         cout << "; modelo : " << vehiculos[i].modelo;
         if(i==len_vehiculos-1){
-            cout << "; consumo_por_km :" << vehiculos[i].consumo_por_km <<")\n]";
+            cout << "; consumo_por_km :" << vehiculos[i].consumo_por_km <<")\n]" << endl;
         } else {
             cout << "; consumo_por_km :" << vehiculos[i].consumo_por_km <<"),";
         }
@@ -209,7 +215,7 @@ int main() {
         {"AC789DE", "Volkswagen Amarok", 3.8f},
         {"AF678IJ", "Renault Kangoo", 3.0f},
         {"AG901KL", "Ford Focus", 2.8f},
-        {"AH234MN", "Mercedes-Benz Sprinter", 4.5f},
+        {"AH234MN", "Mercedes Sprinter", 4.5f},
         {"AI567OP", "Ford Fiesta", 2.6f},
         {"AA123BB", "Toyota Hilux", 4.2f},
         {"AJ890QR", "Volkswagen Polo", 2.3f}
@@ -240,33 +246,32 @@ int main() {
     };
     const int len_viajes = CANT_VIAJES;
 
-
     cout << "--- Inicio de Pruebas ---" << endl;
 
-    cout << "\n1) Ordeno vehiculos por modelo" << endl;
-    cout << "\nLista de vehiculos antes de ordenar" << endl;
+    cout << "\n1) Ordeno vehiculos por modelo:" << endl;
+    cout << "\nLista de vehiculos antes de ordenar:" << endl;
     mostrar_vehiculos(vehiculos, len_vehiculos);
     ordenar_vehiculo_por_modelo(vehiculos, len_vehiculos);
-    cout << "\nLista de vehiculos despues de ordenar" << endl;
+    cout << "\nLista de vehiculos despues de ordenar:" << endl;
     mostrar_vehiculos(vehiculos, len_vehiculos);
 
 
-    cout << "\n2) Busco patente AC789DE" << endl;
+    cout << "\n2) Busco patente AC789DE:" << endl;
     // Ordeno vehiculos por patente para que funcione correctamente.
     ordenar_vehiculo_por_patente(vehiculos, len_vehiculos);
     string patente_a_buscar1 = "AC789DE";
     int index = buscar_indice_patente(vehiculos, len_vehiculos, patente_a_buscar1);
     if (index != -1) {
-        cout << "Patente " << patente_a_buscar1 << " encontrada en indice " << index << ". Modelo: " << vehiculos[index].modelo << endl;
+        cout << "   Patente " << patente_a_buscar1 << " encontrada en indice " << index << ". Modelo: " << vehiculos[index].modelo << endl;
     } else {
-        cout << "Patente " << patente_a_buscar1 << " no encontrada." << endl;
+        cout << "   Patente " << patente_a_buscar1 << " no encontrada." << endl;
     }
 
-    cout << "\n3) Calculo combustible total utilizado" << endl;
+    cout << "\n3) Calculo combustible total utilizado:" << endl;
     float total_combustible = combustible_total_utilizado(viajes, vehiculos, len_viajes, len_vehiculos);
-    cout << "Costo total de combustible utilizado: " << total_combustible << " L (aproximado)" << endl;
+    cout << "   Costo total de combustible utilizado: " << total_combustible << " L " << endl;
 
-    cout << "\n4) Calculo rendimiento de vehiculos" << endl;
+    cout << "\n4) Calculo rendimiento de vehiculos:" << endl;
     peor_y_mejor_rendimiento(viajes, vehiculos, len_viajes, len_vehiculos);
 
     cout << "\n--- Fin de Pruebas ---" << endl;
